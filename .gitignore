@@ -1,0 +1,34 @@
+/src/main/resources/application.yml
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# VS Code (if you ever open with it)
+.vscode/
+
+# Mac / Linux / Windows system files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build output
+/target/
+out/
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle/
+/build/
+
+# Dependency caches
+**/node_modules/
+
+# Spring Boot specific
+application-*.yml
+application-*.properties
