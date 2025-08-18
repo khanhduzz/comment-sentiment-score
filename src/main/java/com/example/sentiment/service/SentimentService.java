@@ -137,12 +137,16 @@ public class SentimentService {
                     "messages", List.of(
                             Map.of(
                                     "role", "user",
-                                    "content", "Analyze the sentiment of this text from -1 (very negative) to 1 (very positive).\n\n" +
-                                            "Text: \"" + comment + "\"\n\n" +
-                                            "Return ONLY raw JSON, no explanation, no code block. Fields:\n" +
-                                            "- score: number between -1 and 1\n" +
-                                            "- sentiment: one of Negative, Neutral, Positive\n\n" +
-                                            "Example:\n{\"score\": 0.7, \"sentiment\": \"Positive\"}"
+                                    "content",
+                                    "Analyze the sentiment of this text. Return ONLY raw JSON, no explanation, no code block. Fields:\n" +
+                                            "- score: number between -1 (very negative) and 1 (very positive)\n" +
+                                            "- sentiment: one of Negative, Neutral, Positive\n" +
+                                            "- emotion: main emotion (e.g. Happy, Angry, Sad, Excited, Frustrated)\n" +
+                                            "- intent: what is the user trying to do (e.g. complain, praise, ask question, suggest improvement)\n" +
+                                            "- broadcast: a short friendly version of the text suitable for broadcasting (1 sentence summary)\n\n" +
+                                            "Example:\n" +
+                                            "{\"score\": -0.8, \"sentiment\": \"Negative\", \"emotion\": \"Angry\", \"intent\": \"complain\", \"broadcast\": \"User is upset with the service.\"}\n\n" +
+                                            "Text: \"" + comment + "\""
                             )
                     ),
                     "web_access", false
@@ -194,11 +198,17 @@ public class SentimentService {
 
             SentimentResponse sr = new SentimentResponse();
             if (sentimentJson != null) {
-                sr.setScore(sentimentJson.path("score").asDouble());
-                sr.setSentiment(sentimentJson.path("sentiment").asText());
+                sr.setScore(sentimentJson.path("score").asDouble(0.0));
+                sr.setSentiment(sentimentJson.path("sentiment").asText("Unknown"));
+                sr.setEmotion(sentimentJson.path("emotion").asText(null));
+                sr.setIntent(sentimentJson.path("intent").asText(null));
+                sr.setBroadcast(sentimentJson.path("broadcast").asText(null));
             } else {
                 sr.setScore(0.0);
                 sr.setSentiment("Unknown");
+                sr.setEmotion(null);
+                sr.setIntent(null);
+                sr.setBroadcast(null);
             }
             return sr;
 
@@ -206,7 +216,11 @@ public class SentimentService {
             SentimentResponse sr = new SentimentResponse();
             sr.setScore(0.0);
             sr.setSentiment("Unknown");
+            sr.setEmotion(null);
+            sr.setIntent(null);
+            sr.setBroadcast(null);
             return sr;
         }
     }
+
 }
