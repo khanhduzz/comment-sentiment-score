@@ -1,0 +1,7 @@
+sentiment:
+  api:
+    url: your-url
+    key: YOUR_KEY
+    host: your-host
+spring:
+  port: 8080
